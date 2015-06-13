@@ -21,20 +21,17 @@ public class Parabloid implements Hessianable{
         double y = point.get(1,0);
         return (x*x/(a*a)+y*y/(b*b))*c;
     }
-    public D1Matrix64F gradiant(D1Matrix64F point){
+    public void gradiant(D1Matrix64F point, D1Matrix64F grad){
         double x = point.get(0,0);
         double y = point.get(1,0);
-        DenseMatrix64F grad = new DenseMatrix64F(2,1);
         // df/dx
         grad.set(0,0, 2*c*x/(a*a));
         // df/dy
         grad.set(1,0, 2*c*y/(b*b));
-        return grad;
     }
-    public D1Matrix64F hessian(D1Matrix64F point){
+    public void hessian(D1Matrix64F point, D1Matrix64F hess){
         double x = point.get(0,0);
         double y = point.get(1,0);
-        DenseMatrix64F hess = new DenseMatrix64F(2,2);
         // d2f/(dx*dx)
         hess.set(0,0, 2*c/(a*a));
         // d2f/(dy*dx)
@@ -43,6 +40,5 @@ public class Parabloid implements Hessianable{
         hess.set(0,1, 0);
         // d2f/(dy*dy)
         hess.set(1,1, 2*c/(b*b));
-        return hess;
     }
 }
