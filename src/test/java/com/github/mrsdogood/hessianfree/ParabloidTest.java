@@ -16,4 +16,13 @@ public class ParabloidTest extends TestCase{
         DenseMatrix64F hess = Utils.getEmptyHessian(f);
         f.hessian(x, hess);
     }
+
+    public void testGradiant(){
+        long randseed = 23984787029L;
+        Parabloid f = new Parabloid(3,4,5);
+        for(int i = 0; i < 100; i++){
+            GradiantCheckUtil.check(this, f, randseed+i);
+        }
+    }
+        
 }
