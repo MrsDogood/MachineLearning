@@ -1,12 +1,12 @@
 package com.github.mrsdogood.neural;
 
-import com.github.mrsdogood.hessianfree.Gradiantable;
+import com.github.mrsdogood.hessianfree.Gradientable;
 
 import java.util.Vector;
 
 import org.ejml.data.D1Matrix64F;
 
-public class FeedForwardNeuralNetErrorFunction implements Gradiantable{
+public class FeedForwardNeuralNetErrorFunction implements Gradientable{
     private FeedForwardNeuralNet nn;
     private Vector<double[]> trainingInputs, trainingOutputs;
     public FeedForwardNeuralNetErrorFunction(FeedForwardNeuralNet nn){
@@ -46,7 +46,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradiantable{
         return totalError;
     }
 
-    public void gradiant(D1Matrix64F x, D1Matrix64F out){
+    public void gradient(D1Matrix64F x, D1Matrix64F out){
         nn.setWeights(x);
         // tare the output
         for(int i = 0; i < out.getNumElements(); i++)

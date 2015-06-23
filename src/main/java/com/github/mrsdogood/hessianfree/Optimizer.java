@@ -3,19 +3,19 @@ package com.github.mrsdogood.hessianfree;
 import org.ejml.data.D1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
-public abstract class HessianableOptimizer{
-    private Hessianable function;
+public abstract class Optimizer<F extends Function>{
+    private F function;
     private D1Matrix64F cur, next;
     private int steps;
 
-    public HessianableOptimizer(Hessianable function, D1Matrix64F initialConditions){
+    public Optimizer(F function, D1Matrix64F initialConditions){
         this.function = function;
         this.cur = new DenseMatrix64F(initialConditions);
         this.next = new DenseMatrix64F(cur.getNumRows(), cur.getNumCols());
         this.steps = 0;
     }
 
-    public Hessianable getFunction(){
+    public F getFunction(){
         return function;
     }
     public D1Matrix64F getCurrentBest(){

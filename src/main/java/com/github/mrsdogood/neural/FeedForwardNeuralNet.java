@@ -104,6 +104,13 @@ public class FeedForwardNeuralNet {
         }
     }
 
+    public DenseMatrix64F getWeights(){
+        DenseMatrix64F matrix = new DenseMatrix64F(numWeights, 1);
+        for(int i = 0; i < numWeights; i++)
+            matrix.set(i, getWeight(i));
+        return matrix;
+    }
+
     public void initBackprop(){
         for(int i = 0; i < presigLayers.length; i++)
             dsig(presigLayers[i], dsigLayers[i]);

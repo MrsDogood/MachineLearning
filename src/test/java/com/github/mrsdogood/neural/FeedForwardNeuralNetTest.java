@@ -76,7 +76,7 @@ public class FeedForwardNeuralNetTest extends TestCase {
         // test weight mod direction
         double[] testDir = getRandVect(r, nn.getNumWeights());
         unitize(testDir);
-        // get gradiant vector for output neuron
+        // get gradient vector for output neuron
         nn.initBackprop();
         double[] grad = new double[nn.getNumWeights()];
         for(int w = 0; w < grad.length; w++){

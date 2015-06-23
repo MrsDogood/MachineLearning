@@ -21,7 +21,7 @@ public class Parabloid implements Hessianable{
         double y = point.get(1,0);
         return (x*x/(a*a)+y*y/(b*b))*c;
     }
-    public void gradiant(D1Matrix64F point, D1Matrix64F grad){
+    public void gradient(D1Matrix64F point, D1Matrix64F grad){
         double x = point.get(0,0);
         double y = point.get(1,0);
         // df/dx

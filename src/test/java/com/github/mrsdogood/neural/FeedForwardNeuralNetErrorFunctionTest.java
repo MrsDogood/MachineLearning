@@ -1,6 +1,6 @@
 package com.github.mrsdogood.neural;
 
-import com.github.mrsdogood.hessianfree.GradiantCheckUtil;
+import com.github.mrsdogood.hessianfree.TestUtils;
 
 import junit.framework.TestCase;
 import java.util.Random;
@@ -13,13 +13,6 @@ public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
     public static final double EPSILON = 1e-10;
     public static final double MAX_ERROR = 1e-8;
     public static final double MAX_ERROR_EST = 1e-3;
-
-    private static double[] getRandVect(Random r, int len){
-        double[] vect = new double[len];
-        for(int i = 0; i < vect.length; i++)
-            vect[i] = r.nextGaussian();
-        return vect;
-    }
 
     public void testEvalManual11(){
         Random r = new Random(RAND_SEED);
@@ -53,7 +46,7 @@ public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
         D1Matrix64F x = new DenseMatrix64F(1,1);
         x.set(0,0,w);
         D1Matrix64F grad = new DenseMatrix64F(1,1);
-        f.gradiant(x, grad);
+        f.gradient(x, grad);
         double actDer = grad.get(0);
         assertEquals(expDer, actDer, MAX_ERROR);
     }
@@ -89,12 +82,12 @@ public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
             new FeedForwardNeuralNetErrorFunction(nn);
         for(int i = 0; i < 10; i++){
             f.addTrainingSet(
-                getRandVect(r, nn.getInputSize()),
-                getRandVect(r, nn.getOutputSize())
+                TestUtils.getRandVect(r, nn.getInputSize()),
+                TestUtils.getRandVect(r, nn.getOutputSize())
             );
         }
         for(int i = 0; i < Math.max(1000/nn.getNumWeights(), 5); i++){
-            GradiantCheckUtil.check(this, f, RAND_SEED+1+i);
+            TestUtils.checkGradient(this, f, RAND_SEED+1+i);
         }
     }
 
