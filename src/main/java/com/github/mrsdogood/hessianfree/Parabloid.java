@@ -1,6 +1,7 @@
 package com.github.mrsdogood.hessianfree;
 
 import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
 /**
@@ -16,7 +17,7 @@ public class Parabloid implements Hessianable{
     public int dim(){
         return 2;
     }
-    public double evaluate(D1Matrix64F point){
+    public double evaluate(RowD1Matrix64F point){
         double x = point.get(0,0);
         double y = point.get(1,0);
         return (x*x/(a*a)+y*y/(b*b))*c;

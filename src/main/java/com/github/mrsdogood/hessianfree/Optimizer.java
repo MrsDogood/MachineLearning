@@ -1,14 +1,14 @@
 package com.github.mrsdogood.hessianfree;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
-public abstract class Optimizer<F extends Function>{
+public abstract class Optimizer<F>{
     private F function;
-    private D1Matrix64F cur, next;
+    private RowD1Matrix64F cur, next;
     private int steps;
 
-    public Optimizer(F function, D1Matrix64F initialConditions){
+    public Optimizer(F function, RowD1Matrix64F initialConditions){
         this.function = function;
         this.cur = new DenseMatrix64F(initialConditions);
         this.next = new DenseMatrix64F(cur.getNumRows(), cur.getNumCols());
