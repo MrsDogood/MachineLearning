@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.ejml.data.DenseMatrix64F;
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.ops.RandomMatrices;
 
 import static org.ejml.ops.CommonOps.mult;
@@ -97,7 +97,7 @@ public class FeedForwardNeuralNet {
         weights[addr[0]].set(addr[1], addr[2], weight);
     }
 
-    public void setWeights(D1Matrix64F w){
+    public void setWeights(RowD1Matrix64F w){
         assert(w.getNumElements()==numWeights);
         for(int i = 0; i < numWeights; i++){
             setWeight(i, w.get(i));

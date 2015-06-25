@@ -5,7 +5,7 @@ import com.github.mrsdogood.hessianfree.TestUtils;
 import junit.framework.TestCase;
 import java.util.Random;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
 public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
@@ -25,7 +25,7 @@ public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
         FeedForwardNeuralNetErrorFunction f =
             new FeedForwardNeuralNetErrorFunction(nn);
         f.addTrainingSet(new double[]{in}, new double[]{expOut});
-        D1Matrix64F x = new DenseMatrix64F(1,1);
+        RowD1Matrix64F x = new DenseMatrix64F(1,1);
         x.set(0,0,w);
         double actError = f.evaluate(x);
         assertEquals(expError, actError, MAX_ERROR);
@@ -43,9 +43,9 @@ public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
         FeedForwardNeuralNetErrorFunction f =
             new FeedForwardNeuralNetErrorFunction(nn);
         f.addTrainingSet(new double[]{in}, new double[]{expOut});
-        D1Matrix64F x = new DenseMatrix64F(1,1);
+        RowD1Matrix64F x = new DenseMatrix64F(1,1);
         x.set(0,0,w);
-        D1Matrix64F grad = new DenseMatrix64F(1,1);
+        RowD1Matrix64F grad = new DenseMatrix64F(1,1);
         f.gradient(x, grad);
         double actDer = grad.get(0);
         assertEquals(expDer, actDer, MAX_ERROR);
@@ -65,7 +65,7 @@ public class FeedForwardNeuralNetErrorFunctionTest extends TestCase{
             new FeedForwardNeuralNetErrorFunction(nn);
         f.addTrainingSet(new double[]{in}, new double[]{expOut});
 
-        D1Matrix64F x = new DenseMatrix64F(1,1);
+        RowD1Matrix64F x = new DenseMatrix64F(1,1);
         x.set(0,0,w);
         double y1 = f.evaluate(x);
         x.set(0,0,w+EPSILON);

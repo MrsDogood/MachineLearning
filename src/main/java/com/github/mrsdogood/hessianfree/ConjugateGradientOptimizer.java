@@ -5,6 +5,7 @@ import org.ejml.data.DenseMatrix64F;
 
 import static org.ejml.ops.CommonOps.add;
 import static org.ejml.ops.CommonOps.multTransA;
+import static org.ejml.ops.CommonOps.changeSign;
 
 public class ConjugateGradientOptimizer extends Optimizer<ConjugateGradientOptimizable>{
     private ConjugateGradientOptimizable optimizable;
@@ -16,8 +17,10 @@ public class ConjugateGradientOptimizer extends Optimizer<ConjugateGradientOptim
         super(optimizable, initialConditions);
         i = 0;
         b = new DenseMatrix64F(optimizable.dim(), 1);
+        optimizable.getB(b);
         d = new DenseMatrix64F(optimizable.dim(), 1);
         tmp1x1 = new DenseMatrix64F(1, 1);
+        tmpNx1 = new DenseMatrix64F(optimizable.dim(), 1);
     }
 
     public void step(RowD1Matrix64F x, RowD1Matrix64F out){
@@ -31,6 +34,7 @@ public class ConjugateGradientOptimizer extends Optimizer<ConjugateGradientOptim
     private void firstStep(RowD1Matrix64F x, RowD1Matrix64F out){
         getFunction().getATimes(x, d);      // d = A * x
         add(d,b,d);                         // d = d + b
+        changeSign(d);
         multTransA(d,d,tmp1x1);             // tmp1x1 = d^T * d
         double alphaNum = tmp1x1.get(0);
         getFunction().getATimes(d, tmpNx1); // tmpNx1 = A * d

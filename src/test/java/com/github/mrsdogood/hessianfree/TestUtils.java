@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.ops.RandomMatrices;
 
 import static org.ejml.ops.CommonOps.add;
@@ -18,12 +18,12 @@ public class TestUtils {
     public static void checkGradient(TestCase t, Gradientable g, Random r, double epsilon, double maxError){
         int dim = g.dim();
         // test from random position x
-        D1Matrix64F x = RandomMatrices.createGaussian(dim, 1, 0, 1, r);
+        RowD1Matrix64F x = RandomMatrices.createGaussian(dim, 1, 0, 1, r);
         // calculate gradient
-        D1Matrix64F grad = new DenseMatrix64F(dim, 1);
+        RowD1Matrix64F grad = new DenseMatrix64F(dim, 1);
         g.gradient(x,grad);
         // create random unit vector direction
-        D1Matrix64F randDir = RandomMatrices.createGaussian(dim, 1, 0, 1, r);
+        RowD1Matrix64F randDir = RandomMatrices.createGaussian(dim, 1, 0, 1, r);
         scale(Math.sqrt(dot(randDir, randDir)), randDir);
         // get the expected rate of change in randDir
         double expChange = dot(grad, randDir);
@@ -42,7 +42,7 @@ public class TestUtils {
 
     public static void checkOptimizer(TestCase t, Optimizer optimizer, int iterations, double maxError, double[] expected){
         optimizer.optimize(iterations);
-        D1Matrix64F best = optimizer.getCurrentBest();
+        RowD1Matrix64F best = optimizer.getCurrentBest();
         assert(best.getNumElements()==expected.length);
         for(int i = 0; i < expected.length; i++){
             t.assertEquals("Optimizer expected output ["+i+"]:", expected[i], best.get(i), maxError);

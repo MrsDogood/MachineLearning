@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import java.util.Random;
 import java.util.Arrays;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 

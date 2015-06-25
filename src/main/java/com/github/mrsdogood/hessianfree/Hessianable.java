@@ -1,7 +1,7 @@
 package com.github.mrsdogood.hessianfree;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 
 public interface Hessianable extends Gradientable{
-    public void hessian(D1Matrix64F x, D1Matrix64F out);
+    public void hessian(RowD1Matrix64F x, RowD1Matrix64F out);
 }

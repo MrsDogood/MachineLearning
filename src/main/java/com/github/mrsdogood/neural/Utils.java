@@ -1,6 +1,6 @@
 package com.github.mrsdogood.neural;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 
 public class Utils {
 
@@ -9,7 +9,7 @@ public class Utils {
         return 1.0/(1.0+Math.exp(-x));
     }
 
-    public static final void sig(D1Matrix64F in, D1Matrix64F out) {
+    public static final void sig(RowD1Matrix64F in, RowD1Matrix64F out) {
         assert(in.getNumRows()==out.getNumRows());
         assert(in.getNumCols()==out.getNumCols());
         int size = in.getNumRows()*out.getNumCols();
@@ -25,7 +25,7 @@ public class Utils {
         return exp/(div*div);
     }
 
-    public static final void dsig(D1Matrix64F in, D1Matrix64F out) {
+    public static final void dsig(RowD1Matrix64F in, RowD1Matrix64F out) {
         assert(in.getNumRows()==out.getNumRows());
         assert(in.getNumCols()==out.getNumCols());
         int size = in.getNumElements();

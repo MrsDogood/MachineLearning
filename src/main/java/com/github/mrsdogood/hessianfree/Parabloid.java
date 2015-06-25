@@ -1,6 +1,6 @@
 package com.github.mrsdogood.hessianfree;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
@@ -22,7 +22,7 @@ public class Parabloid implements Hessianable{
         double y = point.get(1,0);
         return (x*x/(a*a)+y*y/(b*b))*c;
     }
-    public void gradient(D1Matrix64F point, D1Matrix64F grad){
+    public void gradient(RowD1Matrix64F point, RowD1Matrix64F grad){
         double x = point.get(0,0);
         double y = point.get(1,0);
         // df/dx
@@ -30,7 +30,7 @@ public class Parabloid implements Hessianable{
         // df/dy
         grad.set(1,0, 2*c*y/(b*b));
     }
-    public void hessian(D1Matrix64F point, D1Matrix64F hess){
+    public void hessian(RowD1Matrix64F point, RowD1Matrix64F hess){
         double x = point.get(0,0);
         double y = point.get(1,0);
         // d2f/(dx*dx)

@@ -3,7 +3,7 @@ package com.github.mrsdogood.neural;
 import junit.framework.TestCase;
 import java.util.Random;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
 public class FeedForwardNeuralNetTest extends TestCase {

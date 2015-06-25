@@ -4,7 +4,7 @@ import com.github.mrsdogood.hessianfree.Gradientable;
 
 import java.util.Vector;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 
 public class FeedForwardNeuralNetErrorFunction implements Gradientable{
     private FeedForwardNeuralNet nn;
@@ -26,7 +26,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
         return nn.getNumWeights();
     }
 
-    public double evaluate(D1Matrix64F x){
+    public double evaluate(RowD1Matrix64F x){
         nn.setWeights(x);
         double totalError = 0;
         int trainingSets = trainingInputs.size();
@@ -34,7 +34,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
             double[] expOutput = trainingOutputs.get(i);
             nn.getInputLayer().setData(trainingInputs.get(i));
             nn.propagate();
-            D1Matrix64F actualOutput = nn.getOutputLayer();
+            RowD1Matrix64F actualOutput = nn.getOutputLayer();
             double error = 0;
             for(int j = 0; j < expOutput.length; j++){
                 double e = actualOutput.get(j)-expOutput[j];
@@ -46,7 +46,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
         return totalError;
     }
 
-    public void gradient(D1Matrix64F x, D1Matrix64F out){
+    public void gradient(RowD1Matrix64F x, RowD1Matrix64F out){
         nn.setWeights(x);
         // tare the output
         for(int i = 0; i < out.getNumElements(); i++)
@@ -57,7 +57,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
             nn.propagate();
             nn.initBackprop();
             double[] expOutput = trainingOutputs.get(i);
-            D1Matrix64F actualOutput = nn.getOutputLayer();
+            RowD1Matrix64F actualOutput = nn.getOutputLayer();
             for(int o = 0; o < expOutput.length; o++){
                 for(int w = 0; w < nn.getNumWeights(); w++){
                     out.set(w, out.get(w)+

@@ -2,7 +2,7 @@ package com.github.mrsdogood.hessianfree;
 
 import junit.framework.TestCase;
 
-import org.ejml.data.D1Matrix64F;
+import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
 

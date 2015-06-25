@@ -18,14 +18,14 @@ public abstract class Optimizer<F>{
     public F getFunction(){
         return function;
     }
-    public D1Matrix64F getCurrentBest(){
+    public RowD1Matrix64F getCurrentBest(){
         return cur;
     }
     public int getStepsTaken(){
         return steps;
     }
     public void optimize(int numSteps){
-        D1Matrix64F tmp;
+        RowD1Matrix64F tmp;
         for(int i = 0; i < numSteps; i++){
             step(cur, next);
             //swap cur and next
@@ -36,5 +36,5 @@ public abstract class Optimizer<F>{
         }
     }
 
-    protected abstract void step(D1Matrix64F x, D1Matrix64F out);
+    protected abstract void step(RowD1Matrix64F x, RowD1Matrix64F out);
 }
