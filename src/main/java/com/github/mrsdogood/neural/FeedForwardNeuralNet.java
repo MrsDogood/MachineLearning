@@ -83,7 +83,12 @@ public class FeedForwardNeuralNet {
     public void propagate(){
         for(int i = 1; i < layers.length; i++){
             mult(weights[i-1], layers[i-1], presigLayers[i-1]);
-            sig(presigLayers[i-1], layers[i]);
+            try{
+                sig(presigLayers[i-1], layers[i]);
+            }catch(Utils.SigNaNException e){
+                System.err.println("Presig Layer: \n"+ presigLayers[i-1]);
+                throw e;
+            }
         }
     }
 

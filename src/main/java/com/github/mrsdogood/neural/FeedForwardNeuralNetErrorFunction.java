@@ -27,23 +27,28 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
     }
 
     public double evaluate(RowD1Matrix64F x){
-        nn.setWeights(x);
-        double totalError = 0;
-        int trainingSets = trainingInputs.size();
-        for(int i = 0; i < trainingSets; i++){
-            double[] expOutput = trainingOutputs.get(i);
-            nn.getInputLayer().setData(trainingInputs.get(i));
-            nn.propagate();
-            RowD1Matrix64F actualOutput = nn.getOutputLayer();
-            double error = 0;
-            for(int j = 0; j < expOutput.length; j++){
-                double e = actualOutput.get(j)-expOutput[j];
-                error += e*e;
+        try{
+            nn.setWeights(x);
+            double totalError = 0;
+            int trainingSets = trainingInputs.size();
+            for(int i = 0; i < trainingSets; i++){
+                double[] expOutput = trainingOutputs.get(i);
+                nn.getInputLayer().setData(trainingInputs.get(i));
+                nn.propagate();
+                RowD1Matrix64F actualOutput = nn.getOutputLayer();
+                double error = 0;
+                for(int j = 0; j < expOutput.length; j++){
+                    double e = actualOutput.get(j)-expOutput[j];
+                    error += e*e;
+                }
+                totalError += error;
             }
-            totalError += error;
+            totalError *= 0.5; // makes derivative easier
+            return totalError;
+        } catch(Utils.SigNaNException e){
+            System.err.println("Weights in error:\n"+x);
+            throw e;
         }
-        totalError *= 0.5; // makes derivative easier
-        return totalError;
     }
 
     public void gradient(RowD1Matrix64F x, RowD1Matrix64F out){

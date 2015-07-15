@@ -4,9 +4,20 @@ import org.ejml.data.RowD1Matrix64F;
 
 public class Utils {
 
+    public static class SigNaNException extends RuntimeException{};
+
     /** the sigmoid function **/
     public static final double sig(double x) {
-        return 1.0/(1.0+Math.exp(-x));
+        if(Double.isNaN(x)){
+            System.err.println("sig not a number.");
+            throw new SigNaNException();
+        }
+        double ret = 1.0/(1.0+Math.exp(-x));
+        if(Double.isNaN(ret)){
+            System.err.println("sig returning not a number.");
+            throw new SigNaNException();
+        }
+        return ret;
     }
 
     public static final void sig(RowD1Matrix64F in, RowD1Matrix64F out) {
@@ -20,9 +31,17 @@ public class Utils {
 
     /** the derivative of the sigmoid function **/
     public static final double dsig(double x) {
-        double exp = Math.exp(-x);
-        double div = 1+exp;
-        return exp/(div*div);
+        if(Double.isNaN(x)){
+            System.err.println("dsig not a number.");
+            throw new SigNaNException();
+        }
+        double sig = sig(x);
+        double ret = sig*(1-sig);
+        if(Double.isNaN(ret)){
+            System.err.println("dsig returning not a number from:"+x);
+            throw new SigNaNException();
+        }
+        return ret;
     }
 
     public static final void dsig(RowD1Matrix64F in, RowD1Matrix64F out) {

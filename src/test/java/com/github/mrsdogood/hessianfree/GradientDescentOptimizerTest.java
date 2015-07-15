@@ -40,7 +40,6 @@ public class GradientDescentOptimizerTest extends TestCase {
         Random r = new Random(RAND_SEED);
         FeedForwardNeuralNet nn = new FeedForwardNeuralNet(r, 3, 3, 2);
         DenseMatrix64F x = nn.getWeights();
-        //DenseMatrix64F x = RandomMatrices.createGaussian(nn.getNumWeights(), 1, 0, 5, r);
         FeedForwardNeuralNetErrorFunction f =
             new FeedForwardNeuralNetErrorFunction(nn);
         for(int i = 0; i < 8; i++){
