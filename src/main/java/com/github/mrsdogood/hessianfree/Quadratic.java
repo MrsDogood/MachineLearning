@@ -6,6 +6,7 @@ import org.ejml.data.DenseMatrix64F;
 import static org.ejml.ops.CommonOps.mult;
 import static org.ejml.ops.CommonOps.add;
 import static org.ejml.ops.CommonOps.multTransA;
+import static com.github.mrsdogood.hessianfree.Utils.copy;
 
 public class Quadratic implements ConjugateGradientOptimizable, Function{
     private int dim;
@@ -39,6 +40,6 @@ public class Quadratic implements ConjugateGradientOptimizable, Function{
         mult(a,v,out);
     }
     public void getB(RowD1Matrix64F out){
-        out.setData(b.getData());
+        copy(b, out);
     }
 }

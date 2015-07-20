@@ -5,6 +5,7 @@ import org.ejml.data.DenseMatrix64F;
 
 import static org.ejml.ops.CommonOps.add;
 import static org.ejml.ops.CommonOps.insert;
+import static com.github.mrsdogood.hessianfree.Utils.copy;
 
 public class GradientableToCGOAdapter implements ConjugateGradientOptimizable{
     public static final double EPSILON = 1.0e-5;
@@ -46,6 +47,6 @@ public class GradientableToCGOAdapter implements ConjugateGradientOptimizable{
     }
 
     public void getB(RowD1Matrix64F out){
-        out.setData(gradAtCenter.getData());
+        copy(gradAtCenter, out);
     }
 }

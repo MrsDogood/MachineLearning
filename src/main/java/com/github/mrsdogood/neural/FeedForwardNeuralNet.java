@@ -12,6 +12,7 @@ import org.ejml.ops.RandomMatrices;
 import static org.ejml.ops.CommonOps.mult;
 import static com.github.mrsdogood.neural.Utils.sig;
 import static com.github.mrsdogood.neural.Utils.dsig;
+import static com.github.mrsdogood.hessianfree.Utils.copy;
 
 public class FeedForwardNeuralNet {
     private DenseMatrix64F[] weights;
@@ -59,7 +60,7 @@ public class FeedForwardNeuralNet {
     }
 
     public double[] evaluate(double... inputs){
-        getInputLayer().setData(inputs);
+        copy(inputs, getInputLayer());
         propagate();
         return getOutputLayer().getData();
     }

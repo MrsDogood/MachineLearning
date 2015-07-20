@@ -6,6 +6,8 @@ import java.util.Vector;
 
 import org.ejml.data.RowD1Matrix64F;
 
+import static com.github.mrsdogood.hessianfree.Utils.copy;
+
 public class FeedForwardNeuralNetErrorFunction implements Gradientable{
     private FeedForwardNeuralNet nn;
     private Vector<double[]> trainingInputs, trainingOutputs;
@@ -33,7 +35,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
             int trainingSets = trainingInputs.size();
             for(int i = 0; i < trainingSets; i++){
                 double[] expOutput = trainingOutputs.get(i);
-                nn.getInputLayer().setData(trainingInputs.get(i));
+                copy(trainingInputs.get(i), nn.getInputLayer());
                 nn.propagate();
                 RowD1Matrix64F actualOutput = nn.getOutputLayer();
                 double error = 0;
@@ -58,7 +60,7 @@ public class FeedForwardNeuralNetErrorFunction implements Gradientable{
             out.set(i,0);
         int trainingSets = trainingInputs.size();
         for(int i = 0; i < trainingSets; i++){
-            nn.getInputLayer().setData(trainingInputs.get(i));
+            copy(trainingInputs.get(i), nn.getInputLayer());
             nn.propagate();
             nn.initBackprop();
             double[] expOutput = trainingOutputs.get(i);

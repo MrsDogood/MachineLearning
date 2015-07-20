@@ -5,6 +5,8 @@ import java.util.Random;
 import org.ejml.data.RowD1Matrix64F;
 import org.ejml.data.DenseMatrix64F;
 
+import static com.github.mrsdogood.hessianfree.Utils.copy;
+
 public class HessianFreeOptimizer extends Optimizer<Gradientable>{
     private int cgoIterations;
     private Double defaultAlpha, maxAlpha;
@@ -49,10 +51,10 @@ public class HessianFreeOptimizer extends Optimizer<Gradientable>{
         if(f.evaluate(best) <= curBestValue){
             // Motherfuckin mutable structures, passin around pointers and shit.
             // This is where the bug is.
-            out.setData(best.getData());
+            copy(best, out);
         }
         else 
-            out.setData(x.getData());
+            copy(x, out);
         if(debug)
             System.out.println(curBestValue);
     }
