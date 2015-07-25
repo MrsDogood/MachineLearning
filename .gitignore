@@ -1,8 +1,7 @@
 *.swp
 *.class
 *.png
+*.gz
 target/
 extern/dat/
 extern/bin/
-extern/train_imgs/
-extern/test_imgs/

@@ -5,6 +5,11 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
+import java.util.zip.GZIPOutputStream;
+import java.io.OutputStream;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -41,7 +46,7 @@ public class MNISTParser {
         for(int i = 0; i < labels.length; i++){
             if(labels[i] > 9 || labels[i] < 0){
                 System.out.println("Label greater than 9 or less than 0!");
-                System.exit(0);
+                System.exit(1);
             }
         }
         return labels;
@@ -60,7 +65,7 @@ public class MNISTParser {
         
         if(rows != 28 || cols != 28){
             System.out.println("Rows/Cols error! " + rows + "x" + cols + ", byte position: " + (byte_index-8));
-            System.exit(0);
+            System.exit(1);
         }
         
         while(byte_index < image_data.length){
@@ -70,7 +75,7 @@ public class MNISTParser {
                     int grey_value = image_data[byte_index] & 0xFF;
                     if(grey_value < 0 || grey_value > 255) {
                         System.out.println("Pixel value error!");
-                        System.exit(0);
+                        System.exit(1);
                     }
                     int pixel_value = ((grey_value & 0xFF) << 0) | ((grey_value & 0xFF) << 8) | ((grey_value & 0xFF) << 16) | ((255 & 0xFF) << 24);
                     image.setRGB(j, i, pixel_value);
@@ -94,65 +99,130 @@ public class MNISTParser {
                         ImageIO.write(images[i], "png", file);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        System.exit(1);
                     }
                     index++;
                 }
             }
         }
     }
-    
-    public static void main(String[] args){
-        if(args.length < 2 || args.length > 3){
-            System.out.println("<program> label_file image_file output_dir");
-            System.exit(0);
+
+    private static double[] imgToVector(BufferedImage img){
+        double[] vector = new double[img.getWidth()*img.getHeight()];
+        for(int x = 0; x < img.getWidth(); x++){
+            for(int y = 0; y < img.getHeight(); y++){
+                int pxl = img.getRGB(x,y);
+                // normalize 0=black 1=white
+                double gray = ((pxl&0xFF) + (pxl&(0xFF<<8)) + (pxl&(0xFF<<16))) / (255*3.0);
+                vector[x+y*img.getWidth()] = gray;
+            }
         }
+        return vector;
+    }
+
+    // suppress necessary for using array with generics
+    @SuppressWarnings("unchecked")
+    private static void write_binary(int[] labels, BufferedImage[] images, File outputFile, boolean zip){
+        Vector<double[]>[] labeledInstances = (Vector<double[]>[])new Vector[10];
+        for(int i = 0; i < labeledInstances.length; i++)
+            labeledInstances[i] = new Vector<double[]>();
+        assert(labels.length == images.length);
+        for(int i = 0; i < labels.length; i++)
+            labeledInstances[labels[i]].add(imgToVector(images[i]));
+        // restructure into output format now that we know the # in each instance list
+        double[][][] out = new double[labeledInstances.length][][];
+        for(int i = 0; i < labeledInstances.length; i++){
+            out[i] = new double[labeledInstances[i].size()][];
+            for(int j = 0; j < out[i].length; j++){
+                out[i][j] = labeledInstances[i].get(j);
+            }
+        }
+        labeledInstances = null;
+        // write to file
+        try{
+            OutputStream outStream = new FileOutputStream(outputFile);
+            if(zip){
+                outStream = new GZIPOutputStream(outStream);
+            }
+            ObjectOutputStream oos = new ObjectOutputStream(outStream);
+            oos.writeObject(out);
+            oos.close();
+        } catch (Throwable t) {
+            t.printStackTrace();
+            System.exit(1);
+        }
+    }
+    
+    public static void printHelpAndDie(){
+        System.out.println("<program> (-b -z) <label_file> <image_file> <output_dir/file>");
+        System.out.println("-b = output as binary, serialized java double[<label>][<instance>][<pixel>]");
+        System.out.println("-z = output binary zipped using a GZIPOutputStream");
+        System.exit(1);
+    }   
+    public static void main(String[] args){
+        // parse args
+        if(args.length < 3 || args.length > 5)
+            printHelpAndDie();
+        int arg  = 0;
+        boolean binary = false;
+        boolean zipped = false;
+        if(args[arg].equals("-b")){
+            binary = true;
+            arg++;
+            if(args[arg].equals("-z")){
+                zipped = true;
+                arg++;
+            }
+        }
+        File label_file = new File(args[arg++]);
+        File image_file = new File(args[arg++]);
+        File output_loc = new File(args[arg++]);
+        if(arg != args.length)
+            printHelpAndDie();
         
-        File label_file = new File(args[0]);
-        File image_file = new File(args[1]);
-        File output_dir = new File(args[2]);
-        
-        byte[] label = null;
-        byte[] image = null;
-        
+        // validate args
         if(!label_file.exists() || !label_file.isFile()){
             System.out.println("Label file is either a directory or does not exist");
-            System.exit(0);
+            System.exit(1);
         }
         if(!image_file.exists() || !image_file.isFile()){
             System.out.println("Image file is either a directory or does not exist");
-            System.exit(0);
+            System.exit(1);
         }
-        if(!output_dir.exists() || !output_dir.isDirectory()){
+        if(!binary && (!output_loc.exists() || !output_loc.isDirectory())){
             System.out.println("Output directory is either a file or does not exist");
-            System.exit(0);
+            System.exit(1);
         }
         
+        // validate files
+        byte[] label = null;
+        byte[] image = null;
         try {
             label = getData(label_file);
             image = getData(image_file);
         } catch(IOException e) {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(1);
         }
-        
         if(!checkMagic(label, 2049)){
             System.out.println("Label magic failed");
-            System.exit(0);
+            System.exit(1);
         }
-        
         if(!checkMagic(image, 2051)){
             System.out.println("Image magic failed");
-            System.exit(0);
+            System.exit(1);
         }
-        
         if(getLength(label) != getLength(image)){
             System.out.println("Length mis-match");
-            System.exit(0);
+            System.exit(1);
         }
 
+        // process and output
         int[] labels = getLabels(label);
         BufferedImage[] images = getImages(image);
-        
-        write_images(labels, images, output_dir);
+        if(binary)
+            write_binary(labels, images, output_loc, zipped);
+        else
+            write_images(labels, images, output_loc);
     }
 }
