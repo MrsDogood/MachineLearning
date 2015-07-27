@@ -132,6 +132,7 @@ public class MNISTParser {
         // restructure into output format now that we know the # in each instance list
         double[][][] out = new double[labeledInstances.length][][];
         for(int i = 0; i < labeledInstances.length; i++){
+            System.out.println(labeledInstances[i].size()+" "+i+"'s");
             out[i] = new double[labeledInstances[i].size()][];
             for(int j = 0; j < out[i].length; j++){
                 out[i][j] = labeledInstances[i].get(j);

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-(cd extern/ && make)
-mvn compile
+(cd extern/ && make) || exit 1
+mvn compile || exit 1

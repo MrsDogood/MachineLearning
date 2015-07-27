@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.List;
+import java.io.Serializable;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.data.RowD1Matrix64F;
@@ -14,7 +15,8 @@ import static com.github.mrsdogood.neural.Utils.sig;
 import static com.github.mrsdogood.neural.Utils.dsig;
 import static com.github.mrsdogood.hessianfree.Utils.copy;
 
-public class FeedForwardNeuralNet {
+public class FeedForwardNeuralNet implements Serializable{
+    private static final long serialVersionUID = 204398975902235L;
     private DenseMatrix64F[] weights;
     private int numWeights;
     private DenseMatrix64F[] layers;

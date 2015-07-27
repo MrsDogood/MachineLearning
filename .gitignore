@@ -2,6 +2,7 @@
 *.class
 *.png
 *.gz
+*.dat
 target/
 extern/dat/
 extern/bin/

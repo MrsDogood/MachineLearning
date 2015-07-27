@@ -8,7 +8,7 @@ import org.ejml.data.*;
 import java.util.*;
 
 
-public class Main{
+public class SimpleExample{
     // Training data
     // The neural net will be given this data and should learn to reproduce the
     // outputs given the inputs.
