@@ -2,9 +2,19 @@ package com.github.mrsdogood.neural;
 
 import org.ejml.data.RowD1Matrix64F;
 
-public class Utils {
+public final class Utils {
 
     public static class SigNaNException extends RuntimeException{};
+
+    public static void activate(ActivationFunction func, RowD1Matrix64F in, 
+        RowD1Matrix64F out){
+        assert(in.getNumRows()==out.getNumRows());
+        assert(in.getNumCols()==out.getNumCols());
+        int size = in.getNumRows()*out.getNumCols();
+        for(int i = 0; i < size; i++){
+            out.set(i, func.f(in.get(i)));
+        }
+    }
 
     /** the sigmoid function **/
     public static final double sig(double x) {
